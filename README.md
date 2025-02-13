@@ -1,1 +1,1 @@
-# gProject-Whole
+# gProject Whole
