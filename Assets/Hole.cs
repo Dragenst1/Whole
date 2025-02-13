@@ -1,0 +1,82 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshCollider))]
+public class Hole : MonoBehaviour
+{
+	public float speed;
+	public float holeRadius;
+	[Space] [Space]
+	public Material holeMaterial;
+	[Min(3)] public int resolution;
+	public float resIter;
+	MeshFilter filter;
+	MeshCollider collider;
+	Mesh mesh;
+	GameObject visual;
+	public GameObject hitBox;
+
+	private void Start()
+	{
+		visual = new GameObject("visual");
+		visual.AddComponent<MeshRenderer>().sharedMaterial = holeMaterial;
+		visual.AddComponent<MeshFilter>();
+		visual.transform.SetParent(transform);
+		visual.transform.localPosition = Vector3.up * 0.1f;
+
+		if (!filter) filter = GetComponent<MeshFilter>();
+		if (!collider) collider = GetComponent<MeshCollider>();
+		resIter = 360f / resolution;
+
+		UpdateMesh();
+	}
+
+	private void Update()
+	{
+		float x = Input.GetAxisRaw("Horizontal");
+		float y = Input.GetAxisRaw("Vertical");
+
+		Vector3 movement = new Vector3(x, 0f, y) * speed * Time.deltaTime;
+		transform.position += movement; 
+		hitBox.transform.localScale = Vector3.one * 100f * holeRadius;
+	}
+
+	private void UpdateMesh()
+	{
+		mesh = new Mesh();
+		List<Vector3> verts = new List<Vector3>();
+		List<int> tris = new List<int>();
+
+		resIter = 360f / resolution * Mathf.Deg2Rad;
+
+		for (int j = 0, i = 0; j < resolution; j++)
+		{
+			float a0 = (j + 0f) * resIter;
+			float a1 = (j + 1f) * resIter;
+
+			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius + 0f));
+			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius + 0f));
+			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius + 2f));
+			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius + 2f));
+
+			tris.Add(i + 0);
+			tris.Add(i + 1);
+			tris.Add(i + 2);
+
+			tris.Add(i + 1);
+			tris.Add(i + 3);
+			tris.Add(i + 2);
+
+			i += 4;
+		}
+
+		mesh.vertices = verts.ToArray();
+		mesh.triangles = tris.ToArray();
+		filter.mesh = mesh;
+		collider.sharedMesh = mesh;
+
+		visual.GetComponent<MeshFilter>().mesh = mesh;
+	}
+}
