@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,19 +27,18 @@ public class Hole : MonoBehaviour
 
 		if (!filter) filter = GetComponent<MeshFilter>();
 		if (!collider) collider = GetComponent<MeshCollider>();
-		resIter = 360f / resolution;
 
 		UpdateMesh();
+		hitBox.transform.localScale = Vector3.one * 100f * holeRadius;
 	}
 
 	private void Update()
 	{
-		float x = Input.GetAxisRaw("Horizontal");
-		float y = Input.GetAxisRaw("Vertical");
+		//float for player movements
+		float x = Input.GetAxisRaw("Horizontal"); // left and right
+		float y = Input.GetAxisRaw("Vertical"); // forward and back
 
-		Vector3 movement = new Vector3(x, 0f, y) * speed * Time.deltaTime;
-		transform.position += movement; 
-		hitBox.transform.localScale = Vector3.one * 100f * holeRadius;
+		transform.position += new Vector3(x, 0f, y) * speed * Time.deltaTime;
 	}
 
 	private void UpdateMesh()
@@ -49,7 +47,7 @@ public class Hole : MonoBehaviour
 		List<Vector3> verts = new List<Vector3>();
 		List<int> tris = new List<int>();
 
-		resIter = 360f / resolution * Mathf.Deg2Rad;
+		resIter = 360f / resolution * Mathf.Deg2Rad; //fraction of full circumference for use iteratively as we loop around the circle to create the mesh
 
 		for (int j = 0, i = 0; j < resolution; j++)
 		{

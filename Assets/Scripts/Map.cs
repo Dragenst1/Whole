@@ -25,6 +25,7 @@ public class Map : MonoBehaviour
 		}
 		else
 		{
+			//fetching variables from script if the script object exists
 			holePos = V2.IsolateFromVector3(holeScript.transform.position, 1);
 			holeRadius = holeScript.holeRadius;
 		}
@@ -38,17 +39,21 @@ public class Map : MonoBehaviour
 
 		if (holeScript)
 		{
+			//fetching variables from script if the script object exists (this time per update)
+			//(?) likely only needs done once on initial startup but just to be safe
 			holePos = V2.IsolateFromVector3(holeScript.transform.position, 1);
 			holeRadius = holeScript.holeRadius;
 		}
 
+		//"bounding box" coordinate variables
+		//  a = bottom (-), b = top (+)
 		float ax = holePos.x - holeRadius;
 		float ay = holePos.y - holeRadius;
 		float bx = holePos.x + holeRadius;
 		float by = holePos.y + holeRadius;
 		float mm = MapDimension;
 
-		//0
+		//manually creating & appending vertices (better than procedural at this scale)
 		verts.Add(new Vector3(0f, 0f, 0f));
 		verts.Add(new Vector3(mm, 0f, 0f));
 
@@ -65,6 +70,7 @@ public class Map : MonoBehaviour
 		verts.Add(new Vector3(0f, 0f, mm));
 		verts.Add(new Vector3(mm, 0f, mm));
 
+		//triangles are identified as integers, which corrospond to indices of the "verts" array, "0 2 5" together form the first triangle, and subsequently every 3
 		tris.AddRange(new List<int>() {
 			0, 2, 5, 0, 5, 1,
 			2, 6, 7, 2, 7, 3,
