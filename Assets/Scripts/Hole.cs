@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Eden.Utils;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -37,8 +38,14 @@ public class Hole : MonoBehaviour
 		//float for player movements
 		float x = Input.GetAxisRaw("Horizontal"); // left and right
 		float y = Input.GetAxisRaw("Vertical"); // forward and back
+		
+		Vector3 newPos = transform.position + new Vector3(x, 0f, y) * speed * Time.deltaTime;
 
-		transform.position += new Vector3(x, 0f, y) * speed * Time.deltaTime;
+        if (V3.InRange( newPos, 0f, 64f ))
+		{
+            transform.position = newPos;
+        }
+		
 	}
 
 	private void UpdateMesh()
