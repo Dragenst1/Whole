@@ -37,15 +37,11 @@ public class Hole : MonoBehaviour
 	{
 		//float for player movements
 		float x = Input.GetAxisRaw("Horizontal"); // left and right
-		float y = Input.GetAxisRaw("Vertical"); // forward and back
-		
-		Vector3 newPos = transform.position + new Vector3(x, 0f, y) * speed * Time.deltaTime;
+		float z = Input.GetAxisRaw("Vertical"); // forward and back
 
-		//if (V3.InRange(newPos, 0f, 64f))
-        if (V2.InRange(V2.IsolateFromVector3(newPos, 1), 0f, 64f))
-		{
-            transform.position = newPos;
-        }
+		transform.position = new Vector3(
+			Mathf.Clamp(transform.position.x + x * speed * Time.deltaTime, holeRadius, 64f - holeRadius), 0f,
+			Mathf.Clamp(transform.position.z + z * speed * Time.deltaTime, holeRadius, 64f - holeRadius));
 	}
 
 	private void UpdateMesh()
@@ -61,10 +57,10 @@ public class Hole : MonoBehaviour
 			float a0 = (j + 0f) * resIter;
 			float a1 = (j + 1f) * resIter;
 
-			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius + 0f));
-			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius + 0f));
-			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius + 2f));
-			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius + 2f));
+			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius - 0.3f));
+			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius - 0.3f));
+			verts.Add(new Vector3(Mathf.Cos(a0), 0f, Mathf.Sin(a0)) * (holeRadius + 1.8f));
+			verts.Add(new Vector3(Mathf.Cos(a1), 0f, Mathf.Sin(a1)) * (holeRadius + 1.8f));
 
 			tris.Add(i + 0);
 			tris.Add(i + 1);

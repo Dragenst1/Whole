@@ -388,6 +388,15 @@ namespace Eden.Utils
 			return f.x >= min.x && f.x <= max.x && f.y >= min.y && f.y <= max.y && f.z >= min.z && f.z <= max.z;
 		}
 
+		public static Vector3 Clamp(Vector3 f, float min, float max)
+		{
+			return Clamp(f, Vector3.one * min, Vector3.one * max);
+		}
+		public static Vector3 Clamp(Vector3 f, Vector3 min, Vector3 max)
+		{
+			return new Vector3(Mathf.Clamp(f.x, min.x, max.x), Mathf.Clamp(f.y, min.y, max.y), Mathf.Clamp(f.z, min.z, max.z));
+		}
+
 		public static Vector3 PingPong(Vector3 v)
 		{
 			return new Vector3(V1.PingPong(v.x, 1f), V1.PingPong(v.y, 1f), V1.PingPong(v.z, 1f));
