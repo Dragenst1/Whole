@@ -41,11 +41,11 @@ public class Hole : MonoBehaviour
 		
 		Vector3 newPos = transform.position + new Vector3(x, 0f, y) * speed * Time.deltaTime;
 
-        if (V3.InRange( newPos, 0f, 64f ))
+		//if (V3.InRange(newPos, 0f, 64f))
+        if (V2.InRange(V2.IsolateFromVector3(newPos, 1), 0f, 64f))
 		{
             transform.position = newPos;
         }
-		
 	}
 
 	private void UpdateMesh()
